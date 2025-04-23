@@ -1,5 +1,5 @@
 const config = {
-  API_URL: 'http://localhost:3002'
+  API_URL: 'https://alumni-connect-backend.vercel.app/api'
 };
 
 export default config; 
