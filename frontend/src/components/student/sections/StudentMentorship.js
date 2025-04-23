@@ -32,6 +32,7 @@ import {
 } from '@mui/icons-material';
 import { useAuth } from '../../../contexts/AuthContext';
 import axios from 'axios';
+import config from '../../../config';
 
 function StudentMentorship() {
   const { user } = useAuth();
@@ -63,17 +64,10 @@ function StudentMentorship() {
 
   const fetchExistingRequests = async () => {
     try {
+      setLoading(true);
       const token = localStorage.getItem('token');
-      if (!token) {
-        setError('Authentication token not found. Please log in again.');
-        return;
-      }
-
-      const response = await axios.get('http://localhost:3002/api/mentorship/student-requests', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+      const response = await axios.get(`${config.API_URL}/mentorship/student-requests`, {
+        headers: { Authorization: `Bearer ${token}` }
       });
       
       if (response.data && Array.isArray(response.data)) {
@@ -99,16 +93,17 @@ function StudentMentorship() {
       } else {
         setError('Failed to fetch mentorship requests');
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchMentors = async () => {
     try {
+      setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:3002/api/users/alumni', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+      const response = await axios.get(`${config.API_URL}/users/alumni`, {
+        headers: { Authorization: `Bearer ${token}` }
       });
       
       if (response.data && Array.isArray(response.data)) {
@@ -119,11 +114,14 @@ function StudentMentorship() {
     } catch (error) {
       console.error('Error fetching mentors:', error);
       setError('Failed to fetch mentors');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleRequestMentorship = async (mentorId) => {
     try {
+      setLoading(true);
       const token = localStorage.getItem('token');
       if (!token) {
         setError('Authentication token not found. Please log in again.');
@@ -155,14 +153,14 @@ function StudentMentorship() {
       }));
 
       const response = await axios.post(
-        'http://localhost:3002/api/mentorship/request',
-        { 
+        `${config.API_URL}/mentorship/request`,
+        {
           mentorId,
           message: `I would like to request mentorship from you. I am interested in learning more about ${selectedMentor?.profile?.currentPosition || 'your field of expertise'}.`
         },
         {
           headers: {
-            'Authorization': `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json'
           }
         }
@@ -200,6 +198,8 @@ function StudentMentorship() {
       } else {
         setError(error.response?.data?.message || 'Failed to send mentorship request');
       }
+    } finally {
+      setLoading(false);
     }
   };
 

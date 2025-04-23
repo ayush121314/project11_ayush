@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error('Please enter both email and password');
       }
 
-      const response = await axios.post('http://localhost:3002/api/auth/login', {
+      const response = await axios.post('https://alumni-connect-backend-vert.vercel.app/api/auth/login', {
         email: email.trim(),
         password: password.trim()
       });

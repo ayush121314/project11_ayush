@@ -1,5 +1,5 @@
 const config = {
-  API_URL: 'http://localhost:3002/api',
+  API_URL: 'https://alumni-connect-backend-vert.vercel.app/api',
   JOBS_ENDPOINT: '/jobs/',
   JOB_APPLICATIONS_ENDPOINT: '/job-applications',
   AUTH_ENDPOINT: '/auth',

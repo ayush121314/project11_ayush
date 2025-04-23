@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error('All fields are required');
       }
 
-      const response = await axios.post('http://localhost:3002/api/auth/register', userData);
+      const response = await axios.post('https://alumni-connect-backend-vert.vercel.app/api/auth/register', userData);
       console.log('Register response:', response.data);
       
       if (response.data.token && response.data.user) {
@@ -77,7 +77,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       setError(null);
-      const response = await axios.post('http://localhost:3002/api/auth/login', {
+      const response = await axios.post('https://alumni-connect-backend-vert.vercel.app/api/auth/login', {
         email,
         password
       });

@@ -13,6 +13,7 @@ import {
   Alert,
 } from '@mui/material';
 import { useAuth } from '../../../contexts/AuthContext';
+import config from '../../../config';
 
 function StudentSettings() {
   const { user } = useAuth();
@@ -24,19 +25,23 @@ function StudentSettings() {
     timezone: 'UTC',
   });
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     // Fetch user settings from the backend
-    fetchSettings();
+    fetchUserSettings();
   }, []);
 
-  const fetchSettings = async () => {
+  const fetchUserSettings = async () => {
     try {
+      setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3002/api/users/settings', {
+      const response = await fetch(`${config.API_URL}/users/settings`, {
         headers: {
           'Authorization': `Bearer ${token}`,
-        },
+          'Content-Type': 'application/json'
+        }
       });
       if (!response.ok) {
         throw new Error('Failed to fetch settings');
@@ -64,14 +69,15 @@ function StudentSettings() {
 
   const handleSaveSettings = async () => {
     try {
+      setSaving(true);
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3002/api/users/settings', {
+      const response = await fetch(`${config.API_URL}/users/settings`, {
         method: 'PUT',
         headers: {
-          'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(settings),
+        body: JSON.stringify(settings)
       });
 
       if (!response.ok) {

@@ -39,7 +39,7 @@ const Mentorship = () => {
 
   const fetchAlumni = async () => {
     try {
-      const response = await axios.get('http://localhost:3002/api/users/alumni', {
+      const response = await axios.get('https://alumni-connect-backend-vert.vercel.app/api/users/alumni', {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (Array.isArray(response.data)) {
@@ -57,7 +57,7 @@ const Mentorship = () => {
 
   const fetchMentorshipRequests = async () => {
     try {
-      const response = await axios.get('http://localhost:3002/api/mentorship/requests', {
+      const response = await axios.get('https://alumni-connect-backend-vert.vercel.app/api/mentorship/requests', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMentorshipRequests(response.data);
@@ -69,7 +69,7 @@ const Mentorship = () => {
   const handleSendRequest = async (mentorId) => {
     try {
       await axios.post(
-        'http://localhost:3002/api/mentorship/request',
+        'https://alumni-connect-backend-vert.vercel.app/api/mentorship/request',
         { mentorId },
         { headers: { Authorization: `Bearer ${token}` } }
       );

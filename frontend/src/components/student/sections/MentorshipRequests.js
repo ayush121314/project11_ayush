@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import config from '../../../config';
 import { Card, Button, Typography, Alert, Spin, message } from 'antd';
 import { UserOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 
@@ -20,11 +21,8 @@ const MentorshipRequests = () => {
             }
 
             console.log('Verifying token...');
-            const response = await axios.get('http://localhost:3002/api/auth/verify-token', {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
+            const response = await axios.get(`${config.API_URL}/auth/verify-token`, {
+                headers: { Authorization: `Bearer ${token}` }
             });
             
             console.log('Token verification response:', response.data);
@@ -47,26 +45,14 @@ const MentorshipRequests = () => {
 
     const createTestRequest = async () => {
         try {
+            setLoading(true);
             const token = localStorage.getItem('token');
-            if (!token) {
-                message.error('No authentication token found. Please log in again.');
-                return;
-            }
-
-            console.log('Creating test request with token:', token ? 'Present' : 'Missing');
-            
-            const response = await axios.post(
-                'http://localhost:3002/api/mentorship/create-test-request',
+            await axios.post(
+                `${config.API_URL}/mentorship/create-test-request`,
                 {},
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                }
+                { headers: { Authorization: `Bearer ${token}` } }
             );
             
-            console.log('Test request response:', response.data);
             message.success('Test request created successfully');
             fetchMentorshipRequests();
         } catch (error) {
@@ -80,30 +66,20 @@ const MentorshipRequests = () => {
             } else {
                 message.error('Failed to create test request');
             }
+        } finally {
+            setLoading(false);
         }
     };
 
     const checkDatabaseState = async () => {
         try {
+            setLoading(true);
             const token = localStorage.getItem('token');
-            if (!token) {
-                message.error('No authentication token found. Please log in again.');
-                return;
-            }
-
-            console.log('Checking database state...');
-            
             const response = await axios.get(
-                'http://localhost:3002/api/mentorship/test-db-state',
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
-                }
+                `${config.API_URL}/mentorship/test-db-state`,
+                { headers: { Authorization: `Bearer ${token}` } }
             );
             
-            console.log('Database state:', response.data);
             message.success('Database state checked successfully');
         } catch (error) {
             console.error('Error checking database state:', error);
@@ -116,6 +92,8 @@ const MentorshipRequests = () => {
             } else {
                 message.error('Failed to check database state');
             }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -139,11 +117,8 @@ const MentorshipRequests = () => {
 
             console.log('Fetching mentorship requests for user:', userInfo);
             
-            const response = await axios.get('http://localhost:3002/api/mentorship/student-requests', {
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
+            const response = await axios.get(`${config.API_URL}/mentorship/student-requests`, {
+                headers: { Authorization: `Bearer ${token}` }
             });
             
             console.log('Response status:', response.status);
@@ -186,7 +161,7 @@ const MentorshipRequests = () => {
     const handleSendRequest = async (mentorId) => {
         try {
             const response = await axios.post(
-                'http://localhost:3002/api/mentorship/request',
+                `${config.API_URL}/mentorship/request`,
                 { mentorId },
                 {
                     headers: {

@@ -9,6 +9,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import axios from 'axios';
+import config from '../../../config';
 
 const StyledListItem = styled(ListItem)(({ theme }) => ({
   marginBottom: theme.spacing(1),
@@ -29,12 +30,10 @@ const MessagesNotifications = () => {
 
   const fetchNotifications = async () => {
     try {
+      setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:3002/api/notifications', {
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+      const response = await axios.get(`${config.API_URL}/notifications`, {
+        headers: { Authorization: `Bearer ${token}` }
       });
       setNotifications(response.data);
       setError(null);
@@ -50,14 +49,9 @@ const MessagesNotifications = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.patch(
-        `http://localhost:3002/api/notifications/${notificationId}/read`,
+        `${config.API_URL}/notifications/${notificationId}/read`,
         {},
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       // Update local state
       setNotifications(prevNotifications =>
@@ -76,14 +70,9 @@ const MessagesNotifications = () => {
     try {
       const token = localStorage.getItem('token');
       await axios.patch(
-        'http://localhost:3002/api/notifications/read-all',
+        `${config.API_URL}/notifications/read-all`,
         {},
-        {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        }
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       // Update local state
       setNotifications(prevNotifications =>

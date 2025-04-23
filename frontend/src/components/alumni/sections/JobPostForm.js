@@ -40,7 +40,7 @@ const JobPostForm = ({ editMode = false }) => {
       const fetchJob = async () => {
         try {
           const token = localStorage.getItem('token');
-          const response = await axios.get(`http://localhost:3002/api/jobs/${jobId}`, {
+          const response = await axios.get(`/api/jobs/${jobId}`, {
             headers: {
               'Authorization': `Bearer ${token}`
             }
@@ -73,8 +73,8 @@ const JobPostForm = ({ editMode = false }) => {
     try {
       const token = localStorage.getItem('token');
       const url = editMode 
-        ? `http://localhost:3002/api/jobs/${jobId}`
-        : 'http://localhost:3002/api/jobs';
+        ? `/api/jobs/${jobId}`
+        : '/api/jobs';
       
       const response = await axios[editMode ? 'put' : 'post'](
         url,

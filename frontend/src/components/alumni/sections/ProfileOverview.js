@@ -73,7 +73,7 @@ const ProfileOverview = () => {
           throw new Error('No authentication token found');
         }
 
-        const response = await axios.get('http://localhost:3002/api/users/profile', {
+        const response = await axios.get('/api/users/profile', {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -146,7 +146,7 @@ const ProfileOverview = () => {
         }
       };
 
-      const response = await axios.put('http://localhost:3002/api/users/profile', profileData, {
+      const response = await axios.put('/api/users/profile', profileData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`

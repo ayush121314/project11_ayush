@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error('All fields are required');
       }
 
-      const response = await axios.post('http://localhost:3002/api/auth/register', userData);
+      const response = await axios.post('https://alumni-connect-backend-vert.vercel.app/api/auth/register', userData);
       console.log('Register response:', response.data);
       
       if (response.data.success) {
@@ -73,7 +73,7 @@ export const AuthProvider = ({ children }) => {
         throw new Error('Please enter a valid email address');
       }
 
-      const response = await axios.post('http://localhost:3002/api/auth/login', {
+      const response = await axios.post('https://alumni-connect-backend-vert.vercel.app/api/auth/login', {
         email: email.trim(),
         password: password.trim()
       });

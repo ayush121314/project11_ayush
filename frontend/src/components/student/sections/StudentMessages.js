@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import { Send as SendIcon } from '@mui/icons-material';
 import { useAuth } from '../../../contexts/AuthContext';
+import config from '../../../config';
 
 function StudentMessages() {
   const { user } = useAuth();
@@ -22,6 +23,8 @@ function StudentMessages() {
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [newMessage, setNewMessage] = useState('');
   const [conversations, setConversations] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [loadingMessages, setLoadingMessages] = useState(false);
 
   useEffect(() => {
     fetchConversations();
@@ -35,11 +38,12 @@ function StudentMessages() {
 
   const fetchConversations = async () => {
     try {
+      setLoading(true);
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3002/api/messages/conversations', {
+      const response = await fetch(`${config.API_URL}/messages/conversations`, {
         headers: {
-          'Authorization': `Bearer ${token}`,
-        },
+          'Authorization': `Bearer ${token}`
+        }
       });
       if (!response.ok) {
         throw new Error('Failed to fetch conversations');
@@ -52,12 +56,15 @@ function StudentMessages() {
   };
 
   const fetchMessages = async (conversationId) => {
+    if (!conversationId) return;
+    
     try {
+      setLoadingMessages(true);
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3002/api/messages/${conversationId}`, {
+      const response = await fetch(`${config.API_URL}/messages/${conversationId}`, {
         headers: {
-          'Authorization': `Bearer ${token}`,
-        },
+          'Authorization': `Bearer ${token}`
+        }
       });
       if (!response.ok) {
         throw new Error('Failed to fetch messages');
@@ -74,16 +81,16 @@ function StudentMessages() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3002/api/messages/send', {
+      const response = await fetch(`${config.API_URL}/messages/send`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           conversationId: selectedConversation._id,
-          content: newMessage,
-        }),
+          content: newMessage
+        })
       });
 
       if (!response.ok) {

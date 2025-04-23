@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:3002/api',
+  baseURL: 'https://alumni-connect-backend-vert.vercel.app/api',
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
