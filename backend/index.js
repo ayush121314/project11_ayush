@@ -20,7 +20,12 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002'],
+  origin: [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://localhost:3002',
+    'https://alumni-connect-frontend.vercel.app'
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -109,6 +114,10 @@ const startServer = async () => {
   }
 };
 
-startServer();
+// In production, start the server right away
+// In development, export the app for testing
+if (process.env.NODE_ENV !== 'test') {
+  startServer();
+}
 
 module.exports = app; 
